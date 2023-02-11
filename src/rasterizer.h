@@ -24,6 +24,11 @@ namespace CGL {
     virtual void rasterize_line(float x0, float y0,
       float x1, float y1,
       Color color) = 0;
+    
+    // Line equation test
+    virtual float line_test(float x, float y,
+    float x1, float y1,
+    float x2, float y2) = 0;
 
     // Rasterize a triangle
     // P0 = (x0, y0)
@@ -61,6 +66,7 @@ namespace CGL {
   private:
     // The total number of samples
     unsigned int sample_rate;
+    unsigned int dilation;
 
     // Constants indicating which sampling methods are used
     PixelSampleMethod psm;
@@ -95,6 +101,11 @@ namespace CGL {
     void rasterize_line(float x0, float y0,
       float x1, float y1,
       Color color);
+
+    // Line equation test
+    virtual float line_test(float x, float y,
+    float x1, float y1,
+    float x2, float y2);
 
     // Rasterize a triangle
     // P0 = (x0, y0)
