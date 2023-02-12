@@ -43,6 +43,8 @@ namespace CGL {
       float x1, float y1, Color c1,
       float x2, float y2, Color c2) = 0;
 
+    virtual void cal_bary_cord(float coord[], int x, int y, float x0, float x1, float x2, float y0, float y1, float y2) = 0;
+
     virtual void rasterize_textured_triangle(float x0, float y0, float u0, float v0,
       float x1, float y1, float u1, float v1,
       float x2, float y2, float u2, float v2,
@@ -119,6 +121,8 @@ namespace CGL {
     void rasterize_interpolated_color_triangle(float x0, float y0, Color c0,
       float x1, float y1, Color c1,
       float x2, float y2, Color c2);
+
+    void cal_bary_cord(float coord[], int x, int y, float x0, float x1, float x2, float y0, float y1, float y2);
 
     void rasterize_textured_triangle(float x0, float y0, float u0, float v0,
       float x1, float y1, float u1, float v1,

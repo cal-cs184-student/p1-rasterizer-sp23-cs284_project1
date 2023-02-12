@@ -175,6 +175,13 @@ namespace CGL {
 
   }
 
+  void RasterizerImp::cal_bary_cord(float coord[], int x, int y, float x0, float x1, float x2, float y0, float y1, float y2) {
+    float alpha = (-(x - x1) * (y2 - y1) + (y - y1) * (x2 - x1)) / (-(x0 - x1) * (y2 - y1) + (y0 - y1) * (x2 - x1));
+    float beta = (-(x - x2) * (y0 - y2) + (y - y2) * (x0 - x2)) / (-(x1 - x2) * (y0 - y2) + (y1 - y2) * (x0 - x2));
+    float gamma = 1 - alpha - beta;
+    coord[0] = alpha, coord[1] = beta, coord[2] = gamma;
+  }
+
 
   void RasterizerImp::rasterize_textured_triangle(float x0, float y0, float u0, float v0,
     float x1, float y1, float u1, float v1,
@@ -231,25 +238,17 @@ namespace CGL {
           SampleParams sp;
           sp.psm = this->psm, sp.lsm = this->lsm;
 
-          int left = floor(x_sample), right = ceil(x_sample);
-          int top = floor(y_sample), bottom = ceil(y_sample);
+          int left = x, right = x + 1;
+          int top = y, bottom = y + 1;
 
-          float alpha = (-(left - x1) * (y2 - y1) + (top - y1) * (x2 - x1)) / (-(x0 - x1) * (y2 - y1) + (y0 - y1) * (x2 - x1));
-          float beta = (-(left - x2) * (y0 - y2) + (top - y2) * (x0 - x2)) / (-(x1 - x2) * (y0 - y2) + (y1 - y2) * (x0 - x2));
-          float gamma = 1 - alpha - beta;
-          sp.p_uv = Vector2D(alpha * u0 + beta * u1 + gamma * u2, alpha * v0 + beta * v1 + gamma * v2);
-
-          alpha = (-(right - x1) * (y2 - y1) + (top - y1) * (x2 - x1)) / (-(x0 - x1) * (y2 - y1) + (y0 - y1) * (x2 - x1));
-          beta = (-(right - x2) * (y0 - y2) + (top - y2) * (x0 - x2)) / (-(x1 - x2) * (y0 - y2) + (y1 - y2) * (x0 - x2));
-          gamma = 1 - alpha - beta;
-          sp.p_dx_uv = Vector2D(alpha * u0 + beta * u1 + gamma * u2, alpha * v0 + beta * v1 + gamma * v2);
+          float coord[3];
+          cal_bary_cord(coord, left, top, x0, x1, x2, y0, y1, y2);
+          sp.p_uv = Vector2D(coord[0] * u0 + coord[1] * u1 + coord[2] * u2, coord[0] * v0 + coord[1] * v1 + coord[2] * v2);
+          cal_bary_cord(coord, right, top, x0, x1, x2, y0, y1, y2);
+          sp.p_dx_uv = Vector2D(coord[0] * u0 + coord[1] * u1 + coord[2] * u2, coord[0] * v0 + coord[1] * v1 + coord[2] * v2);
+          cal_bary_cord(coord, left, bottom, x0, x1, x2, y0, y1, y2);
+          sp.p_dy_uv = Vector2D(coord[0] * u0 + coord[1] * u1 + coord[2] * u2, coord[0] * v0 + coord[1] * v1 + coord[2] * v2);
           
-
-          alpha = (-(left - x1) * (y2 - y1) + (bottom - y1) * (x2 - x1)) / (-(x0 - x1) * (y2 - y1) + (y0 - y1) * (x2 - x1));
-          beta = (-(left - x2) * (y0 - y2) + (bottom - y2) * (x0 - x2)) / (-(x1 - x2) * (y0 - y2) + (y1 - y2) * (x0 - x2));
-          gamma = 1 - alpha - beta;
-          sp.p_dy_uv = Vector2D(alpha * u0 + beta * u1 + gamma * u2, alpha * v0 + beta * v1 + gamma * v2);
-
           
           sample_buffer[(int)floor(y_sample) * sample_frame_width + (int)floor(x_sample)] = tex.sample(sp);
         }

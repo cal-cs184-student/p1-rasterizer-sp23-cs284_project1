@@ -19,7 +19,7 @@ namespace CGL {
     // }
 
     // TODO: Task 6: Fill this in.
-    float D = this->get_level(sp);
+    float D = get_level(sp);
     float D_floor = floor(D), D_ceil = ceil(D);
     switch(sp.lsm)
     {
@@ -55,15 +55,13 @@ namespace CGL {
 
   float Texture::get_level(const SampleParams& sp) {
     // TODO: Task 6: Fill this in.
-    Vector2D bias_x = sp.p_dx_uv - sp.p_uv;
-    Vector2D bias_y = sp.p_dy_uv - sp.p_uv;
-    bias_x[0]*=this->width, bias_x[1]*=this->height;
-    bias_y[0]*=this->width, bias_y[1]*=this->height;
-    float D = log2(max(bias_x.norm2(), bias_y.norm2())) / 2;
-    if(D>this->mipmap.size()-1)
-      D = this->mipmap.size()-1;
-    else if(D<0)
-      D = 0;
+    Vector2D diff_vector_x = sp.p_dx_uv - sp.p_uv;
+    Vector2D diff_vector_y = sp.p_dy_uv - sp.p_uv;
+    diff_vector_x[0] *= (width - 1), diff_vector_x[1] *= (height - 1);
+    diff_vector_y[0] *= (width - 1), diff_vector_y[1] *= (height - 1);
+    float D = log2(max(diff_vector_x.norm2(), diff_vector_y.norm2()));
+    D = D > mipmap.size() - 1? mipmap.size() - 1 : D;
+    D = D < 0? 0 : D;
     return D;
   }
 
@@ -85,8 +83,8 @@ namespace CGL {
     return Color(1, 0, 1);
   }
 
-  Color Texture::lerp(float x, Color c0, Color c1) {
-    return Color(c0.r + x * (c1.r - c0.r), c0.g + x * (c1.g - c0.g), c0.b + x * (c1.b - c0.b));
+  Color Texture::lerp(float x, Color c_small, Color c_large) {
+    return Color(c_small.r + x * (c_large.r - c_small.r), c_small.g + x * (c_large.g - c_small.g), c_small.b + x * (c_large.b - c_small.b));
   }
 
   Color Texture::sample_bilinear(Vector2D uv, int level) {
