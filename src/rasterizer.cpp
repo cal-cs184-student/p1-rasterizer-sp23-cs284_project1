@@ -181,7 +181,37 @@ namespace CGL {
     float x2, float y2, float u2, float v2,
     Texture& tex)
   {
-    // TODO: Task 5: Fill in the SampleParams struct and pass it to the tex.sample function.
+    // // TODO: Task 5: Fill in the SampleParams struct and pass it to the tex.sample function.
+    // x0 *= dilation, x1 *= dilation, x2 *= dilation;
+    // y0 *= dilation, y1 *= dilation, y2 *= dilation;
+    // int sample_frame_width = width * dilation, sample_frame_height = height * dilation;
+    // int x_min = min({x0, x1, x2}) - 1, x_max = max({x0, x1, x2}) + 1;
+    // int y_min = min({y0, y1, y2}) - 1, y_max = max({y0, y1, y2}) + 1;
+    // for (int y = y_min; y < y_max; y++) {
+    //   for (int x = x_min; x < x_max; x++) {
+    //     float x_sample = x + 0.5, y_sample = y + 0.5;
+
+    //     //TODO: check boundary conditions for this
+    //     if (x_sample < 0 || x_sample >= sample_frame_width || y_sample < 0 || y_sample >= sample_frame_height) continue;
+        
+    //     float test1 = line_test(x_sample, y_sample, x0, y0, x1, y1);
+    //     float test2 = line_test(x_sample, y_sample, x1, y1, x2, y2);
+    //     float test3 = line_test(x_sample, y_sample, x2, y2, x0, y0);
+    //     if ((test1 >= 0 && test2 >= 0 && test3 >= 0) || (test1 <= 0 && test2 <= 0 && test3 <= 0)) {
+    //       float alpha = (-(x_sample - x1) * (y2 - y1) + (y_sample - y1) * (x2 - x1)) / (-(x0 - x1) * (y2 - y1) + (y0 - y1) * (x2 - x1));
+    //       float beta = (-(x_sample - x2) * (y0 - y2) + (y_sample - y2) * (x0 - x2)) / (-(x1 - x2) * (y0 - y2) + (y1 - y2) * (x0 - x2));
+    //       float gamma = 1 - alpha - beta;
+
+    //       Vector2D uv(alpha * u0 + beta * u1 + gamma * u2, alpha * v0 + beta * v1 + gamma * v2);
+    //       SampleParams sp;
+    //       sp.psm = this->psm, sp.lsm = this->lsm, sp.p_uv = uv;
+    //       sample_buffer[(int)floor(y_sample) * sample_frame_width + (int)floor(x_sample)] = tex.sample(sp);
+    //     }
+    //   }
+    // }
+
+    // TODO: Task 6: Set the correct barycentric differentials in the SampleParams struct.
+    // Hint: You can reuse code from rasterize_triangle/rasterize_interpolated_color_triangle
     x0 *= dilation, x1 *= dilation, x2 *= dilation;
     y0 *= dilation, y1 *= dilation, y2 *= dilation;
     int sample_frame_width = width * dilation, sample_frame_height = height * dilation;
@@ -198,23 +228,33 @@ namespace CGL {
         float test2 = line_test(x_sample, y_sample, x1, y1, x2, y2);
         float test3 = line_test(x_sample, y_sample, x2, y2, x0, y0);
         if ((test1 >= 0 && test2 >= 0 && test3 >= 0) || (test1 <= 0 && test2 <= 0 && test3 <= 0)) {
-          float alpha = (-(x_sample - x1) * (y2 - y1) + (y_sample - y1) * (x2 - x1)) / (-(x0 - x1) * (y2 - y1) + (y0 - y1) * (x2 - x1));
-          float beta = (-(x_sample - x2) * (y0 - y2) + (y_sample - y2) * (x0 - x2)) / (-(x1 - x2) * (y0 - y2) + (y1 - y2) * (x0 - x2));
-          float gamma = 1 - alpha - beta;
-
-          Vector2D uv(alpha * u0 + beta * u1 + gamma * u2, alpha * v0 + beta * v1 + gamma * v2);
           SampleParams sp;
-          sp.psm = this->psm, sp.lsm = this->lsm, sp.p_uv = uv;
+          sp.psm = this->psm, sp.lsm = this->lsm;
+
+          int left = floor(x_sample), right = ceil(x_sample);
+          int top = floor(y_sample), bottom = ceil(y_sample);
+
+          float alpha = (-(left - x1) * (y2 - y1) + (top - y1) * (x2 - x1)) / (-(x0 - x1) * (y2 - y1) + (y0 - y1) * (x2 - x1));
+          float beta = (-(left - x2) * (y0 - y2) + (top - y2) * (x0 - x2)) / (-(x1 - x2) * (y0 - y2) + (y1 - y2) * (x0 - x2));
+          float gamma = 1 - alpha - beta;
+          sp.p_uv = Vector2D(alpha * u0 + beta * u1 + gamma * u2, alpha * v0 + beta * v1 + gamma * v2);
+
+          alpha = (-(right - x1) * (y2 - y1) + (top - y1) * (x2 - x1)) / (-(x0 - x1) * (y2 - y1) + (y0 - y1) * (x2 - x1));
+          beta = (-(right - x2) * (y0 - y2) + (top - y2) * (x0 - x2)) / (-(x1 - x2) * (y0 - y2) + (y1 - y2) * (x0 - x2));
+          gamma = 1 - alpha - beta;
+          sp.p_dx_uv = Vector2D(alpha * u0 + beta * u1 + gamma * u2, alpha * v0 + beta * v1 + gamma * v2);
+          
+
+          alpha = (-(left - x1) * (y2 - y1) + (bottom - y1) * (x2 - x1)) / (-(x0 - x1) * (y2 - y1) + (y0 - y1) * (x2 - x1));
+          beta = (-(left - x2) * (y0 - y2) + (bottom - y2) * (x0 - x2)) / (-(x1 - x2) * (y0 - y2) + (y1 - y2) * (x0 - x2));
+          gamma = 1 - alpha - beta;
+          sp.p_dy_uv = Vector2D(alpha * u0 + beta * u1 + gamma * u2, alpha * v0 + beta * v1 + gamma * v2);
+
+          
           sample_buffer[(int)floor(y_sample) * sample_frame_width + (int)floor(x_sample)] = tex.sample(sp);
         }
       }
     }
-    // TODO: Task 6: Set the correct barycentric differentials in the SampleParams struct.
-    // Hint: You can reuse code from rasterize_triangle/rasterize_interpolated_color_triangle
-
-
-
-
   }
 
   void RasterizerImp::set_sample_rate(unsigned int rate) {

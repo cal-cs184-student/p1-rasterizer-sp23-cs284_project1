@@ -7,18 +7,47 @@
 namespace CGL {
 
   Color Texture::sample(const SampleParams& sp) {
-    // TODO: Task 5: Switch between two methods.
-    switch (sp.psm)
-    {
-    case P_NEAREST:
-      return sample_nearest(sp.p_uv, 0);
-    case P_LINEAR:
-      return sample_bilinear(sp.p_uv, 0);
-    default:
-      break;
-    }
-    // TODO: Task 6: Fill this in.
+    // // TODO: Task 5: Switch between two methods.
+    // switch (sp.psm)
+    // {
+    // case P_NEAREST:
+    //   return sample_nearest(sp.p_uv, 0);
+    // case P_LINEAR:
+    //   return sample_bilinear(sp.p_uv, 0);
+    // default:
+    //   break;
+    // }
 
+    // TODO: Task 6: Fill this in.
+    float D = this->get_level(sp);
+    float D_floor = floor(D), D_ceil = ceil(D);
+    switch(sp.lsm)
+    {
+      case L_ZERO:
+        if (sp.psm==P_NEAREST) {
+          return sample_nearest(sp.p_uv, 0);
+        }
+        else {
+          return sample_bilinear(sp.p_uv, 0);
+        }
+        
+      case L_NEAREST:
+        if (sp.psm==P_NEAREST) {
+            return sample_nearest(sp.p_uv, round(D));
+          }
+        else {
+          return sample_bilinear(sp.p_uv, round(D));
+        }
+
+      case L_LINEAR:
+        if(sp.psm == P_NEAREST) {
+          return lerp(D - D_floor, sample_nearest(sp.p_uv, D_ceil), sample_nearest(sp.p_uv, D_floor));
+        }
+        else if(sp.psm == P_LINEAR) {
+          return lerp(D - D_floor, sample_bilinear(sp.p_uv, D_ceil), sample_bilinear(sp.p_uv, D_floor));
+        }
+
+    }
 
 // return magenta for invalid level
     return Color(1, 0, 1);
@@ -26,10 +55,16 @@ namespace CGL {
 
   float Texture::get_level(const SampleParams& sp) {
     // TODO: Task 6: Fill this in.
-
-
-
-    return 0;
+    Vector2D bias_x = sp.p_dx_uv - sp.p_uv;
+    Vector2D bias_y = sp.p_dy_uv - sp.p_uv;
+    bias_x[0]*=this->width, bias_x[1]*=this->height;
+    bias_y[0]*=this->width, bias_y[1]*=this->height;
+    float D = log2(max(bias_x.norm2(), bias_y.norm2())) / 2;
+    if(D>this->mipmap.size()-1)
+      D = this->mipmap.size()-1;
+    else if(D<0)
+      D = 0;
+    return D;
   }
 
   Color MipLevel::get_texel(int tx, int ty) {
