@@ -79,8 +79,8 @@ namespace CGL {
       return mip.get_texel(nearest_u, nearest_v);
     }
 
-    // return magenta for invalid level
-    return Color(1, 0, 1);
+    // return white for invalid level
+    return Color(1, 1, 1);
   }
 
   Color Texture::lerp(float x, Color c_small, Color c_large) {
@@ -106,8 +106,8 @@ namespace CGL {
     }
 
 
-    // return magenta for invalid level
-    return Color(1, 0, 1);
+    // return white for invalid level
+    return Color(1, 1, 1);
   }
 
 

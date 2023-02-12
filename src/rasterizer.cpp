@@ -23,12 +23,12 @@ namespace CGL {
     // NOTE: You are not required to implement proper supersampling for points and lines
     // It is sufficient to use the same color for all supersamples of a pixel for points and lines (not triangles)
 
+    // for filling in sample buffer using supersampling
     for (int yy = 0; yy < dilation; ++yy) {
       for (int xx = 0; xx < dilation; ++xx) {
         sample_buffer[(y * dilation + yy) * width * dilation + x * dilation + xx] = c;
       } 
     }
-    // sample_buffer[y * dilation * width + x] = c;
   }
 
   // Rasterize a point: simple example to help you start familiarizing
