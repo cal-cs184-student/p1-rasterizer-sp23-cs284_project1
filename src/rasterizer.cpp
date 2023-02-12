@@ -158,11 +158,14 @@ namespace CGL {
         float test2 = line_test(x_sample, y_sample, x1, y1, x2, y2);
         float test3 = line_test(x_sample, y_sample, x2, y2, x0, y0);
         if ((test1 >= 0 && test2 >= 0 && test3 >= 0) || (test1 <= 0 && test2 <= 0 && test3 <= 0)) {
-          float alpha = -(x_sample - x1) * (y2 - y1) + (y_sample - y1) * (x2 - x1) / (-(x0 - x1) * (y2 - y1) + (y0 - y1) * (x2 - x1));
-          float beta = -(x_sample - x2) * (y0 - y2) + (y_sample - y2) * (x0 - x2) / (-(x1 - x2) * (y0 - y2) + (y1 - y2) * (x0 - x2));
+          float alpha = (-(x_sample - x1) * (y2 - y1) + (y_sample - y1) * (x2 - x1)) / (-(x0 - x1) * (y2 - y1) + (y0 - y1) * (x2 - x1));
+          float beta = (-(x_sample - x2) * (y0 - y2) + (y_sample - y2) * (x0 - x2)) / (-(x1 - x2) * (y0 - y2) + (y1 - y2) * (x0 - x2));
           float gamma = 1 - alpha - beta;
 
+          // printf("%f, %f, %f\n", alpha, beta, gamma);
+          // printf("%f, %f, %f\n %f, %f, %f\n %f, %f, %f\n", c0.r, c0.g, c0.b, c1.r, c1.g, c1.b, c2.r, c2.g, c2.b);
           sample_buffer[(int)floor(y_sample) * sample_frame_width + (int)floor(x_sample)] = alpha * c0 + beta * c1 + gamma * c2;
+          // printf("%f, %f, %f\n", sample_buffer[(int)floor(y_sample) * sample_frame_width + (int)floor(x_sample)].r, sample_buffer[(int)floor(y_sample) * sample_frame_width + (int)floor(x_sample)].g, sample_buffer[(int)floor(y_sample) * sample_frame_width + (int)floor(x_sample)].b, beta, gamma);
           // sample_buffer[(int)floor(y_sample) * sample_frame_width + (int)floor(x_sample)] = c2;
         }
       }
