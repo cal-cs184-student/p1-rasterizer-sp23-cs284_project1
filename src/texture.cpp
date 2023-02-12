@@ -7,6 +7,16 @@
 namespace CGL {
 
   Color Texture::sample(const SampleParams& sp) {
+    // TODO: Task 5: Switch between two methods.
+    switch (sp.psm)
+    {
+    case P_NEAREST:
+      return sample_nearest(sp.p_uv, 0);
+    case P_LINEAR:
+      return sample_bilinear(sp.p_uv, 0);
+    default:
+      break;
+    }
     // TODO: Task 6: Fill this in.
 
 
