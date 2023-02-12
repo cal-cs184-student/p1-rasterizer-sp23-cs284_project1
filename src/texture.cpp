@@ -29,19 +29,38 @@ namespace CGL {
   Color Texture::sample_nearest(Vector2D uv, int level) {
     // TODO: Task 5: Fill this in.
     auto& mip = mipmap[level];
+    float nearest_u = round(uv[0] * mip.width);
+    float nearest_v = round(uv[1] * mip.height);
 
-
-
+    if (nearest_u >= 0 && nearest_u < mip.width && nearest_v >= 0 && nearest_v < mip.height) {
+      return mip.get_texel(nearest_u, nearest_v);
+    }
 
     // return magenta for invalid level
     return Color(1, 0, 1);
   }
 
+  Color Texture::lerp(float x, Color c0, Color c1) {
+    return Color(c0.r + x * (c1.r - c0.r), c0.g + x * (c1.g - c0.g), c0.b + x * (c1.b - c0.b));
+  }
+
   Color Texture::sample_bilinear(Vector2D uv, int level) {
     // TODO: Task 5: Fill this in.
     auto& mip = mipmap[level];
+    float texture_u = uv[0] * mip.width;
+    float texture_v = uv[1] * mip.height;
 
+    int left = floor(texture_u), right = ceil(texture_u);
+    int top = floor(texture_v), bottom = ceil(texture_v);
+    float s = texture_u - left, t = texture_v - top;
 
+    if (left >= 0 && right < mip.width && top >= 0 && bottom < mip.height) {
+      Color top_left = mipmap[level].get_texel(left, top);
+      Color top_right = mipmap[level].get_texel(right, top);
+      Color bottom_left = mipmap[level].get_texel(left, bottom);
+      Color bottom_right = mipmap[level].get_texel(right, bottom);
+      return lerp(t, lerp(s, top_left, top_right), lerp(s, bottom_left, bottom_right));
+    }
 
 
     // return magenta for invalid level
