@@ -43,32 +43,6 @@
 
 <p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 
-<div align="middle">
-  <table style="width=100%">
-    <tr>
-      <td>
-        <img src="images/image1.png" align="middle" width="400px"/>
-        <figcaption align="middle">Caption goes here.</figcaption>
-      </td>
-      <td>
-        <img src="images/image2.png" align="middle" width="400px"/>
-        <figcaption align="middle">Caption goes here.</figcaption>
-      </td>
-    </tr>
-    <br>
-    <tr>
-      <td>
-        <img src="images/image3.png" align="middle" width="400px"/>
-        <figcaption align="middle">Caption goes here.</figcaption>
-      </td>
-      <td>
-        <img src="images/image4.png" align="middle" width="400px"/>
-        <figcaption align="middle">Caption goes here.</figcaption>
-      </td>
-    </tr>
-  </table>
-</div>
-
 
 <h3 align="middle">Part 2: Antialiasing triangles</h3>
 
@@ -77,6 +51,31 @@
 <h3 align="middle">Part 3: Transforms</h3>
 
 <p>We used the transform, translate, and rotate functions that we implemented to make a YMCABot out of a basic robot. We played around with the robot.svg file to get familiarized with which code segment corresponded to which body part. The hierarchal structure made it easy for us to move and rotate the robot’s entire arm without having to deal with the upper arm and lower arm. </p>
+<div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fa057133e-15a3-4b1f-bc47-c7d754400f5d%2FY.png?id=a9190d89-b58b-48cc-9caf-6f8ff47111b7&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
+        <figcaption align="middle">Bot forms Y</figcaption>
+      </td>
+      <td>
+        <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F89c792d1-1f1f-4986-8fbe-86033c2567bf%2FM.png?id=b55731dd-5c4f-4ed1-b9c5-a36ea2666e9d&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
+        <figcaption align="middle">Bot forms M</figcaption>
+      </td>
+    </tr>
+    <br>
+    <tr>
+      <td>
+        <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Febe5ba3d-b1b4-4f02-bb66-51ea3f7b811d%2FC.png?id=f22b8c7e-5c49-42d8-9196-8c41b579df1e&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
+        <figcaption align="middle">Bot forms C</figcaption>
+      </td>
+      <td>
+        <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fe54ec9c3-3d5f-4137-8f72-a1ee59e8ec1b%2FA.png?id=bbe67335-5ea4-4ed2-954a-0bbe0d056f66&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
+        <figcaption align="middle">Bot forms A</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
 
 
 <h2 align="middle">Section II: Sampling</h2>
@@ -86,8 +85,11 @@
 <h3 align="middle">Part 4: Barycentric coordinates</h3>
 
 <p>Barycentric coordinates are a coordinate system for triangles, which specify the position of a point in a triangle with respect to its distances from the triangle's vertices. The barycentric coordinates of a point P in a triangle ABC are given by the ratios of the areas of sub-triangles PBC, PCA, and PAB to the area of triangle ABC. These ratios are often referred to as (alpha, beta, gamma), where </p>
-
-<p>alpha = area of triangle PBC / area of triangle ABC <br> beta = area of triangle PCA / area of triangle ABC <br> gamma = area of triangle PAB / area of triangle ABC </p>
+<ul>
+  <li>alpha = area of triangle PBC / area of triangle ABC </li>
+  <li>beta = area of triangle PCA / area of triangle ABC </li>
+  <li>gamma = area of triangle PAB / area of triangle ABC </li>
+</ul>
 
 <p>The barycentric coordinates of P satisfy the condition alpha + beta + gamma = 1, and any point within and on the boundaries of the triangle can be represented by a unique set of barycentric coordinates.</p>
 
@@ -109,11 +111,24 @@
   <li>Nearest-pixel sampling takes the color from the nearest texel. In our implementation, we used the round() function to find the nearest integer values of the texel coordinates that were calculated from the pixel’s barycentric coordinates.</li>
   <li>Bilinear sampling weight the texel colors according to the distance of the texel of interest from the four nearest texels. The closer a point is to a particular texel, the more weight that texel’s color is given in the interpolation. This creates a smooth blend of color between adjacent pixels, resulting in a more similar appearance to the texture image. In our implementation, we used the lerp() function three times for each bilinear sample.</li>
 </ul>
+<p>The main difference between pixel sampling and bilinear sampling, as seen in the images above, is how smooth the latitude and longitude lines are. Pixel sampling produces line segments while bilinear sampling blurs the line and produces a continuous line. This is more prominent in the case of lower sampling rate because supersampling also removes visual artifacts to some extent. Bilinear sampling is better in this particular case because it interpolates the colors of neighboring texels, which helps to smooth out any jagged edges or blocky artifacts that would otherwise be visible. </p>
 
 
 <h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
 
-<p>We used the transform, translate, and rotate functions that we implemented to make a YMCABot out of a basic robot. We played around with the robot.svg file to get familiarized with which code segment corresponded to which body part. The hierarchal structure made it easy for us to move and rotate the robot’s entire arm without having to deal with the upper arm and lower arm. </p>
+<p>Level sampling is a technique for texture mapping that uses lower-resolution versions of a texture (or mipmaps) to speed up rendering, reduce aliasing and blurring. When applying the texture image onto an object, the appropriate mipmap level is selected based on the object’s distance to the image frame, and samples the texel colors from that level to compute the color for the pixel. The use of mipmaps allows the us to optimize the texture sampling process by not accessing the full-resolution texture for distant objects. </p>
+<p>Our implementation of level sampling can be described in the following step-by-step process: </p>
+<ol>
+  <li>Find the barycentric coordinates of sample (x, y) at (x+1, y) and (x, y+1)</li>
+  <li>Use barycentric coordinates to calculate the two vectors (du/dx, dv/dx) and (du/dy, dv/dy) and scale them to the dimensions of our texture image</li>
+  <li>Plug values into D = log2(L) where L = max(sqrt((du/dx)^2 + (dv/dx)^2) or sqrt((du/dy)^2 + (dv/dy)^2)) to find the desired mipmap level</li>
+  <li>If the desired level is in between two mipmap levels, we use linear interpolation to blend the texels from the two closest levels to approximate the color of the desired level.</li>
+  <li>The color is then used to shade the pixel being rendered.</li>
+</ol>
+<p>Pixel sampling is the fastest technique because we only have to sample color from the nearest texel. It requires the least processing and memory among these three methods, but it can result in undesirable visual artifacts like jaggies and aliasing. </p>
+<p>Level sampling with mipmaps requires more memory, specifically 1/3 memory overhead from the multiple lower-resolution texture images, than pixel sampling. However, it provides improved antialiasing and thus less visual artifacts. However, because more linear interpolations are done, the speed of level sampling is slower than pixel sampling. </p>
+<p>Supersampling provides the accurate antialiasing, but it requires the a lot of processing power with bad scalability. It also introduces memory overhead because we use larger sample frames to store the intermediate supersample. </p>
+<p>In practice, a combination of techniques may be used to achieve a balance between performance and quality. </p>
 
 
 
