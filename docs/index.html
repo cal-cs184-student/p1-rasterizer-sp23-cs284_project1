@@ -87,14 +87,28 @@
 
 <p>Barycentric coordinates are a coordinate system for triangles, which specify the position of a point in a triangle with respect to its distances from the triangle's vertices. The barycentric coordinates of a point P in a triangle ABC are given by the ratios of the areas of sub-triangles PBC, PCA, and PAB to the area of triangle ABC. These ratios are often referred to as (alpha, beta, gamma), where </p>
 
-<p>alpha = area of triangle PBC / area of triangle ABC </p>
-<p>beta = area of triangle PCA / area of triangle ABC </p>
-<p>gamma = area of triangle PAB / area of triangle ABC </p>
+<p>alpha = area of triangle PBC / area of triangle ABC <br> beta = area of triangle PCA / area of triangle ABC <br> gamma = area of triangle PAB / area of triangle ABC </p>
+
+<p>The barycentric coordinates of P satisfy the condition alpha + beta + gamma = 1, and any point within and on the boundaries of the triangle can be represented by a unique set of barycentric coordinates.</p>
+
+<p> Barycentric coordinates can also be used to smoothly blend colors in a triangle by performing color interpolation using the barycentric coordinates of each pixel inside the triangle. We describe a step-by-step approach below: </p>
+<ol>
+  <li>Assign a color (with RGB values 0-255) to each vertex of the triangle.</li>
+  <li>For each pixel inside the triangle, compute its barycentric coordinates (alpha, beta, gamma) with respect to the triangle.</li>
+  <li>Use the barycentric coordinates to linearly interpolate the colors at each vertex in RGB space  to obtain the color at the pixel.</li>
+</ol>
+
 
 
 <h3 align="middle">Part 5: "Pixel sampling" for texture mapping</h3>
 
-<p>We used the transform, translate, and rotate functions that we implemented to make a YMCABot out of a basic robot. We played around with the robot.svg file to get familiarized with which code segment corresponded to which body part. The hierarchal structure made it easy for us to move and rotate the robot’s entire arm without having to deal with the upper arm and lower arm. </p>
+<p>In texture mapping, pixel sampling refers to the process of determining the color or other attributes (e.g. opacity, roughness, geometry) of a surface at a specific point by sampling the texture that is to be applied to that surface. </p>
+<p>To determine the texture at a particular point, we first calculated the barycentric coordinates for the pixel of interest, which is used to interpolate its corresponding location in the texture image using the provided corresponding texels of the triangle’s vertices. The texel coordinates we obtain from linear interpolation doesn’t always correspond with an exact texel in the texture image. Therefore, we use different sampling methods (e.g. nearest neighbor or bilinear interpolation) to determine the texel color. The texel color at that location in the texture image is then sampled to determine the texture color or other attributes to be applied at that point on the object's surface. </p>
+<p>Different methods of sampling, such as nearest-pixel or bilinear sampling, can be used to smoothly blend between adjacent texels to create a more similar appearance to the texture image. </p>
+<ul>
+  <li>Nearest-pixel sampling takes the color from the nearest texel. In our implementation, we used the round() function to find the nearest integer values of the texel coordinates that were calculated from the pixel’s barycentric coordinates.</li>
+  <li>Bilinear sampling weight the texel colors according to the distance of the texel of interest from the four nearest texels. The closer a point is to a particular texel, the more weight that texel’s color is given in the interpolation. This creates a smooth blend of color between adjacent pixels, resulting in a more similar appearance to the texture image. In our implementation, we used the lerp() function three times for each bilinear sample.</li>
+</ul>
 
 
 <h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
