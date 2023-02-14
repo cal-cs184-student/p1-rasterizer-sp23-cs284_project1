@@ -23,16 +23,19 @@
 
 <body>
 
-<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2018</h1>
+<h1 align="middle">CS 284: Computer Graphics and Imaging, Spring 2023</h1>
 <h1 align="middle">Project 1: Rasterizer</h1>
-<h2 align="middle">YOUR NAME, CS184-??</h2>
+<h2 align="middle">I-Lun Tsai, Hsuan-Hao Wang, CS284-??</h2>
 
 <br><br>
 
 <div>
 
 <h2 align="middle">Overview</h2>
-<p>Give a high-level overview of what you implemented in this project. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the project.</p>
+<p>In this project, we built a rasterizer to draw simple triangles and colored them by interpolating colors from texture images using barycentric coordinates. 
+  The final product was a functional vector graphics renderer that could render SVGs (Scalable Vector Graphics) as PNGs. We learned basic techniques such as 
+  rasterizing triangles using different sampling rates or different texture mapping methods. Our main takeaway is getting familiar with the techniques used in 
+  the rasterization pipeline and understanding the memory and computational tradeoffs between each method.</p>
 
 <h2 align="middle">Section I: Rasterization</h2>
 
@@ -73,17 +76,30 @@
 
 <h3 align="middle">Part 3: Transforms</h3>
 
+<p>We used the transform, translate, and rotate functions that we implemented to make a YMCABot out of a basic robot. We played around with the robot.svg file to get familiarized with which code segment corresponded to which body part. The hierarchal structure made it easy for us to move and rotate the robot’s entire arm without having to deal with the upper arm and lower arm. </p>
 
 
 <h2 align="middle">Section II: Sampling</h2>
 
+<p>We used the transform, translate, and rotate functions that we implemented to make a YMCABot out of a basic robot. We played around with the robot.svg file to get familiarized with which code segment corresponded to which body part. The hierarchal structure made it easy for us to move and rotate the robot’s entire arm without having to deal with the upper arm and lower arm. </p>
+
 <h3 align="middle">Part 4: Barycentric coordinates</h3>
+
+<p>Barycentric coordinates are a coordinate system for triangles, which specify the position of a point in a triangle with respect to its distances from the triangle's vertices. The barycentric coordinates of a point P in a triangle ABC are given by the ratios of the areas of sub-triangles PBC, PCA, and PAB to the area of triangle ABC. These ratios are often referred to as (alpha, beta, gamma), where </p>
+
+<p>alpha = area of triangle PBC / area of triangle ABC </p>
+<p>beta = area of triangle PCA / area of triangle ABC </p>
+<p>gamma = area of triangle PAB / area of triangle ABC </p>
 
 
 <h3 align="middle">Part 5: "Pixel sampling" for texture mapping</h3>
 
+<p>We used the transform, translate, and rotate functions that we implemented to make a YMCABot out of a basic robot. We played around with the robot.svg file to get familiarized with which code segment corresponded to which body part. The hierarchal structure made it easy for us to move and rotate the robot’s entire arm without having to deal with the upper arm and lower arm. </p>
+
 
 <h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
+
+<p>We used the transform, translate, and rotate functions that we implemented to make a YMCABot out of a basic robot. We played around with the robot.svg file to get familiarized with which code segment corresponded to which body part. The hierarchal structure made it easy for us to move and rotate the robot’s entire arm without having to deal with the upper arm and lower arm. </p>
 
 
 
