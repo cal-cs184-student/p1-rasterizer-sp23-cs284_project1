@@ -14,6 +14,9 @@
   h1, h2, h3, h4 {
     font-family: 'Source Sans Pro', sans-serif;
   }
+  figcaption {
+    color: gray;
+  }
 </style>
 <title>CS 184 Rasterizer</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -87,9 +90,9 @@
 
 <p>Barycentric coordinates are a coordinate system for triangles, which specify the position of a point in a triangle with respect to its distances from the triangle's vertices. The barycentric coordinates of a point P in a \(\triangle\) ABC are given by the ratios of the areas of sub-triangles PBC, PCA, and PAB to the area of \(\triangle\) ABC. These ratios are often referred to as (\(\alpha \), \(\beta \), \(\gamma \)), where </p>
 <ul>
-  <li>\(\alpha \) = area of triangle PBC / area of \(\triangle\) ABC </li>
-  <li>\(\beta \) = area of triangle PCA / area of \(\triangle\) ABC </li>
-  <li>\(\gamma \) = area of triangle PAB / area of \(\triangle\) ABC </li>
+  <li>\(\alpha \) = area of \(\triangle\) PBC / area of \(\triangle\) ABC </li>
+  <li>\(\beta \) = area of \(\triangle\) PCA / area of \(\triangle\) ABC </li>
+  <li>\(\gamma \) = area of \(\triangle\) PAB / area of \(\triangle\) ABC </li>
 </ul>
 
 <p>The barycentric coordinates of P satisfy the condition  \(\alpha \ + \beta \ + \gamma \ = 1 \), and any point within and on the boundaries of the triangle can be represented by a unique set of barycentric coordinates.</p>
