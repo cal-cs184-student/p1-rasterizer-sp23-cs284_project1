@@ -19,7 +19,7 @@ namespace CGL {
 
   // Used by rasterize_point and rasterize_line
   void RasterizerImp::fill_pixel(size_t x, size_t y, Color c) {
-    // TODO: Task 2: You might need this function to fix points and lines (such as the black rectangle border in test4.svg)
+    // Task 2: You might need this function to fix points and lines (such as the black rectangle border in test4.svg)
     // NOTE: You are not required to implement proper supersampling for points and lines
     // It is sufficient to use the same color for all supersamples of a pixel for points and lines (not triangles)
 
@@ -90,14 +90,14 @@ namespace CGL {
     float x1, float y1,
     float x2, float y2,
     Color color) {
-    // // TODO: Task 1: Implement basic triangle rasterization here, no supersampling
+    // // Task 1: Implement basic triangle rasterization here, no supersampling
     // int x_min = min({x0, x1, x2}) - 1, x_max = max({x0, x1, x2}) + 1;
     // int y_min = min({y0, y1, y2}) - 1, y_max = max({y0, y1, y2}) + 1;
     // for (int y = y_min; y < y_max; y++) {
     //   for (int x = x_min; x < x_max; x++) {
     //     float x_sample = x + 0.5, y_sample = y + 0.5;
 
-    //     //TODO: check boundary conditions for this
+    //     //check boundary conditions for this
     //     if (x_sample < 0 || x_sample >= width || y_sample < 0 || y_sample >= height) continue;
         
     //     float test1 = line_test(x_sample, y_sample, x0, y0, x1, y1);
@@ -109,7 +109,7 @@ namespace CGL {
     //   }
     // }
 
-    // TODO: Task 2: Update to implement super-sampled rasterization
+    // Task 2: Update to implement super-sampled rasterization
     x0 *= dilation, x1 *= dilation, x2 *= dilation;
     y0 *= dilation, y1 *= dilation, y2 *= dilation;
     int sample_frame_width = width * dilation, sample_frame_height = height * dilation;
@@ -119,7 +119,7 @@ namespace CGL {
       for (int x = x_min; x < x_max; x++) {
         float x_sample = x + 0.5, y_sample = y + 0.5;
 
-        //TODO: check boundary conditions for this
+        //check boundary conditions for this
         if (x_sample < 0 || x_sample >= sample_frame_width || y_sample < 0 || y_sample >= sample_frame_height) continue;
         
         float test1 = line_test(x_sample, y_sample, x0, y0, x1, y1);
@@ -140,7 +140,7 @@ namespace CGL {
     float x1, float y1, Color c1,
     float x2, float y2, Color c2)
   {
-    // TODO: Task 4: Rasterize the triangle, calculating barycentric coordinates and using them to interpolate vertex colors across the triangle
+    // Task 4: Rasterize the triangle, calculating barycentric coordinates and using them to interpolate vertex colors across the triangle
     // Hint: You can reuse code from rasterize_triangle
     x0 *= dilation, x1 *= dilation, x2 *= dilation;
     y0 *= dilation, y1 *= dilation, y2 *= dilation;
@@ -151,7 +151,7 @@ namespace CGL {
       for (int x = x_min; x < x_max; x++) {
         float x_sample = x + 0.5, y_sample = y + 0.5;
 
-        //TODO: check boundary conditions for this
+        //check boundary conditions for this
         if (x_sample < 0 || x_sample >= sample_frame_width || y_sample < 0 || y_sample >= sample_frame_height) continue;
         
         float test1 = line_test(x_sample, y_sample, x0, y0, x1, y1);
@@ -188,7 +188,7 @@ namespace CGL {
     float x2, float y2, float u2, float v2,
     Texture& tex)
   {
-    // // TODO: Task 5: Fill in the SampleParams struct and pass it to the tex.sample function.
+    // // Task 5: Fill in the SampleParams struct and pass it to the tex.sample function.
     // x0 *= dilation, x1 *= dilation, x2 *= dilation;
     // y0 *= dilation, y1 *= dilation, y2 *= dilation;
     // int sample_frame_width = width * dilation, sample_frame_height = height * dilation;
@@ -198,7 +198,7 @@ namespace CGL {
     //   for (int x = x_min; x < x_max; x++) {
     //     float x_sample = x + 0.5, y_sample = y + 0.5;
 
-    //     //TODO: check boundary conditions for this
+    //     //check boundary conditions for this
     //     if (x_sample < 0 || x_sample >= sample_frame_width || y_sample < 0 || y_sample >= sample_frame_height) continue;
         
     //     float test1 = line_test(x_sample, y_sample, x0, y0, x1, y1);
@@ -217,7 +217,7 @@ namespace CGL {
     //   }
     // }
 
-    // TODO: Task 6: Set the correct barycentric differentials in the SampleParams struct.
+    // Task 6: Set the correct barycentric differentials in the SampleParams struct.
     // Hint: You can reuse code from rasterize_triangle/rasterize_interpolated_color_triangle
     x0 *= dilation, x1 *= dilation, x2 *= dilation;
     y0 *= dilation, y1 *= dilation, y2 *= dilation;
@@ -228,7 +228,7 @@ namespace CGL {
       for (int x = x_min; x < x_max; x++) {
         float x_sample = x + 0.5, y_sample = y + 0.5;
 
-        //TODO: check boundary conditions for this
+        //check boundary conditions for this
         if (x_sample < 0 || x_sample >= sample_frame_width || y_sample < 0 || y_sample >= sample_frame_height) continue;
         
         float test1 = line_test(x_sample, y_sample, x0, y0, x1, y1);
@@ -257,7 +257,7 @@ namespace CGL {
   }
 
   void RasterizerImp::set_sample_rate(unsigned int rate) {
-    // TODO: Task 2: You may want to update this function for supersampling support
+    // Task 2: You may want to update this function for supersampling support
 
     this->sample_rate = rate;
     this->dilation = sqrt(rate);
@@ -270,7 +270,7 @@ namespace CGL {
   void RasterizerImp::set_framebuffer_target(unsigned char* rgb_framebuffer,
     size_t width, size_t height)
   {
-    // TODO: Task 2: You may want to update this function for supersampling support
+    // Task 2: You may want to update this function for supersampling support
 
     this->width = width;
     this->height = height;
@@ -293,7 +293,7 @@ namespace CGL {
   // pixels from the supersample buffer data.
   //
   void RasterizerImp::resolve_to_framebuffer() {
-    // TODO: Task 2: You will likely want to update this function for supersampling support
+    // Task 2: You will likely want to update this function for supersampling support
 
     for (int x = 0; x < width; ++x) {
       for (int y = 0; y < height; ++y) {

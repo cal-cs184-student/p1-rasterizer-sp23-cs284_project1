@@ -7,7 +7,7 @@
 namespace CGL {
 
   Color Texture::sample(const SampleParams& sp) {
-    // // TODO: Task 5: Switch between two methods.
+    // // Task 5: Switch between two methods.
     // switch (sp.psm)
     // {
     // case P_NEAREST:
@@ -18,7 +18,7 @@ namespace CGL {
     //   break;
     // }
 
-    // TODO: Task 6: Fill this in.
+    // Task 6: Fill this in.
     float D = get_level(sp);
     float D_floor = floor(D), D_ceil = ceil(D);
     switch(sp.lsm)
@@ -54,7 +54,7 @@ namespace CGL {
   }
 
   float Texture::get_level(const SampleParams& sp) {
-    // TODO: Task 6: Fill this in.
+    // Task 6: Fill this in.
     Vector2D diff_vector_x = sp.p_dx_uv - sp.p_uv;
     Vector2D diff_vector_y = sp.p_dy_uv - sp.p_uv;
     diff_vector_x[0] *= (width - 1), diff_vector_x[1] *= (height - 1);
@@ -70,17 +70,17 @@ namespace CGL {
   }
 
   Color Texture::sample_nearest(Vector2D uv, int level) {
-    // TODO: Task 5: Fill this in.
+    // Task 5: Fill this in.
     auto& mip = mipmap[level];
-    float nearest_u = round(uv[0] * mip.width);
-    float nearest_v = round(uv[1] * mip.height);
+    int nearest_u = round(uv[0] * mip.width);
+    int nearest_v = round(uv[1] * mip.height);
 
-    if (nearest_u >= 0 && nearest_u < mip.width && nearest_v >= 0 && nearest_v < mip.height) {
-      return mip.get_texel(nearest_u, nearest_v);
+    if (!(nearest_u >= 0 && nearest_u < mip.width && nearest_v >= 0 && nearest_v < mip.height)) {
+      // return texel closest to the border for invalid level
+      nearest_u = max(0, min((int)mip.width - 1, nearest_u));
+      nearest_v = max(0, min((int)mip.height - 1, nearest_v));
     }
-
-    // return white for invalid level
-    return Color(1, 1, 1);
+    return mip.get_texel(nearest_u, nearest_v); 
   }
 
   Color Texture::lerp(float x, Color c_small, Color c_large) {
@@ -88,7 +88,7 @@ namespace CGL {
   }
 
   Color Texture::sample_bilinear(Vector2D uv, int level) {
-    // TODO: Task 5: Fill this in.
+    // Task 5: Fill this in.
     auto& mip = mipmap[level];
     float texture_u = uv[0] * mip.width;
     float texture_v = uv[1] * mip.height;
@@ -104,10 +104,12 @@ namespace CGL {
       Color bottom_right = mipmap[level].get_texel(right, bottom);
       return lerp(t, lerp(s, top_left, top_right), lerp(s, bottom_left, bottom_right));
     }
+    else { // return texel closest to the border for invalid level
+      texture_u = (int)max((float)0, min((float)mip.width - 1, texture_u));
+      texture_v = (int)max((float)0, min((float)mip.height - 1, texture_v));
+      return mip.get_texel(texture_u, texture_v);
+    }
 
-
-    // return white for invalid level
-    return Color(1, 1, 1);
   }
 
 
