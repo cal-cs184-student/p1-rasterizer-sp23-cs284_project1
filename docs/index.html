@@ -31,13 +31,14 @@
 
 <h1 align="middle">CS 284: Computer Graphics and Imaging, Spring 2023</h1>
 <h1 align="middle">Project 1: Rasterizer</h1>
-<h2 align="middle">I-Lun Tsai, Hsuan-Hao Wang, CS284-??</h2>
+<h2 align="middle">I-Lun Tsai, Hsuan-Hao Wang, CS284 - where can I find the group number??</h2>
 
 <br><br>
 
 <div>
 
 <h2 align="middle">Overview</h2>
+
 <p>In this project, we built a rasterizer to draw simple triangles and colored them by interpolating colors from texture images using barycentric coordinates. 
   The final product was a functional vector graphics renderer that could render SVGs (Scalable Vector Graphics) as PNGs. We learned basic techniques such as 
   rasterizing triangles using different sampling rates or different texture mapping methods. Our main takeaway is getting familiar with the techniques used in 
@@ -47,10 +48,105 @@
 
 <h3 align="middle">Part 1: Rasterizing single-color triangles</h3>
 
-<p>Here is an example \(2 \times 2\) gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
+<p>To create a rasterized triangle, we implemented the function "rasterize_triangle," 
+  which fills pixels within the triangle with the triangle's color. This function iterates through 
+  points in the triangle's \(x\) and \(y\) axes, from the minimum to the maximum values.</p>
+<p>We used three of the line tests discussed in class to determine if a point is inside the triangle. 
+  For each point, the function checked if the inner product was \(\ge 0\), or \(\le 0\). The point (\(x + 0.5, y + 0.5\)) 
+  was chosen to calculate the center of the sample. If a point was determined to be inside the 
+  triangle, the input color value was filled into the sample buffer's pixel (\(x, y\)).</p>
+<p>To be more precise, the algorithm performs a single check of every sample within the bounding 
+  box because we conducted the point-in-triangle test for every point in the for loops, 
+  ensuring that it is no worse than one that checks each sample within the bounding box of the 
+  triangle. However, this method may produce alias such as jaggies near the edges of the triangle, 
+  as seen in Figure 1 and Figure 2.</p>
+<div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="../result_imgs/task1/basic:test4svg.png" align="middle" width="400px"/>
+        <figcaption align="middle">test4.svg</figcaption>
+      </td>
+      <td>
+        <img src="../result_imgs/task1/basic:test5svg.png" align="middle" width="400px"/>
+        <figcaption align="middle">test5.svg</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
 
 
 <h3 align="middle">Part 2: Antialiasing triangles</h3>
+
+<p> To implement supersampling, I enlarged the sample buffer and updated the rasterization code to 
+  account for different sample sizes. When set_sample_rate or set_framebuffer_target is called, 
+  the sample buffer is resized by a factor of sample_rate to accommodate the larger supersampling 
+  size. In the rasterize_triangle function, I multiplied all coordinates by dilation, where dilation 
+  is the square root of sample_rate, making the sample size sample_rate larger than before. The rest 
+  of the rasterization process is the same as in task 1.</p>
+<p>As the sample buffer is now larger than before, I had to modify the resolve_to_framebuffer 
+  function to ensure that the output framebuffer can receive the corresponding pixel value required. 
+  Instead of directly filling in the color value in the sample buffer, there is now \(dilation \times dilation\) points 
+  corresponding to one pixel in the frame buffer. I average the \(dilation \times dilation\) color values to 
+  obtain the correct color for each pixel. </p>
+<p>One of the most important details in supersampling is determining the location of corresponding 
+  pixels in the sample buffer. Instead of the original two loops that iterate over width and height, 
+  I added two nested for loops from 0 to dilation and calculated all the pixels that contribute to 
+  this pixel in the frame buffer. </p>
+<p>Supersampling effectively avoids aliasing artifacts like jaggies in Figure 1 and Figure 2. 
+  Figures 3 - 5 and Figures 6 - 8 display images with different sample rates, demonstrating 
+  how supersampling reduces jaggies. At a sample rate of 1, there are disconnected and unpleasing 
+  jaggies in the sharp edges. However, at a sample rate of 16, the edges are smoother and more 
+  connected in these high-frequency areas. However, supersampling requires allocating a sample 
+  buffer that is sample_rate times larger and performing sample rate times the number of calculations, 
+  making the algorithm unaffordable at higher sample_rates. </p>
+<div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="../result_imgs/task2/basic:test4_1_svg.png" align="middle" width="400px"/>
+        <figcaption align="middle">basic/test4.svg, sample rate = 1</figcaption>
+      </td>
+      <td>
+        <img src="../result_imgs/task2/basic:test8_1_svg.png" align="middle" width="400px"/>
+        <figcaption align="middle">basic/test8.svg, sample rate = 1</figcaption>
+      </td>
+    </tr>
+    <br>
+    <tr>
+      <td>
+        <img src="../result_imgs/task2/basic:test4_4_svg.png" align="middle" width="400px"/>
+        <figcaption align="middle">basic/test4.svg, sample rate = 4</figcaption>
+      </td>
+      <td>
+        <img src="../result_imgs/task2/basic:test8_4_svg.png" align="middle" width="400px"/>
+        <figcaption align="middle">basic/test8.svg, sample rate = 4</figcaption>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <img src="../result_imgs/task2/basic:test4_9_svg.png" align="middle" width="400px"/>
+        <figcaption align="middle">basic/test4.svg, sample rate = 9</figcaption>
+      </td>
+      <td>
+        <img src="../result_imgs/task2/basic:test8_9_svg.png" align="middle" width="400px"/>
+        <figcaption align="middle">basic/test8.svg, sample rate = 9</figcaption>
+      </td>
+    </tr>
+    <br>
+    <tr>
+      <td>
+        <img src="../result_imgs/task2/basic:test4_16_svg.png" align="middle" width="400px"/>
+        <figcaption align="middle">basic/test4.svg, sample rate = 16</figcaption>
+      </td>
+      <td>
+        <img src="../result_imgs/task2/basic:test8_16_svg.png" align="middle" width="400px"/>
+        <figcaption align="middle">basic/test8.svg, sample rate = 16</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+
 
 
 
@@ -152,7 +248,7 @@
 <p>Level sampling is a technique for texture mapping that uses lower-resolution versions of a texture (or mipmaps) to speed up rendering, reduce aliasing and blurring. When applying the texture image onto an object, the appropriate mipmap level is selected based on the object’s distance to the image frame, and samples the texel colors from that level to compute the color for the pixel. The use of mipmaps allows the us to optimize the texture sampling process by not accessing the full-resolution texture for distant objects. </p>
 <p>Our implementation of level sampling can be described in the following step-by-step process: </p>
 <ol>
-  <li>Find the barycentric coordinates of sample (\(x, y\)) at (\(x + 1, y\)) and (\(x, y + 1\))</li>
+  <li>Find the barycentric coordinates of sample ((\(x, y\))) at (\(x + 1, y\)) and (\(x, y + 1\))</li>
   <li>Use barycentric coordinates to calculate the two vectors \[({du \over dx}, {dv \over dx})\] and \[({du \over dy}, {dv \over dy})\]  and scale them to the dimensions of our texture image</li>
   <li>Plug values into \(D = \log_2{L} \) where \(L = \max ( \sqrt{({du \over dx})^2 + ({dv \over dx})^2},\sqrt{({du \over dy})^2 + ({dv \over dy})^2}) \) to find the desired mipmap level</li>
   <li>If the desired level is in between two mipmap levels, we use linear interpolation to blend the texels from the two closest levels to approximate the color of the desired level.</li>
