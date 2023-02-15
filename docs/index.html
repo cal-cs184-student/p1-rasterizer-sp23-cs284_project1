@@ -31,7 +31,7 @@
 
 <h1 align="middle">CS 284: Computer Graphics and Imaging, Spring 2023</h1>
 <h1 align="middle">Project 1: Rasterizer</h1>
-<h2 align="middle">I-Lun Tsai, Hsuan-Hao Wang, CS284 - where can we find the group number??</h2>
+<h2 align="middle">I-Lun Tsai, Hsuan-Hao Wang, CS284 - Where can we find the group number??</h2>
 
 <div align="middle">
   <img src="images/title_image.png" align="middle" width="600px"/>
@@ -218,7 +218,7 @@
 <p>Different methods of sampling, such as nearest-pixel or bilinear sampling, can be used to smoothly blend between adjacent texels to create a more similar appearance to the texture image. </p>
 <ul>
   <li>Nearest-pixel sampling takes the color from the nearest texel. In our implementation, we used the round() function to find the nearest integer values of the texel coordinates that were calculated from the pixel’s barycentric coordinates.</li>
-  <li>Bilinear sampling weight the texel colors according to the distance of the texel of interest from the four nearest texels. The closer a point is to a particular texel, the more weight that texel’s color is given in the interpolation. This creates a smooth blend of color between adjacent pixels, resulting in a more similar appearance to the texture image. In our implementation, we used the lerp() function three times for each bilinear sample.</li>
+  <li>Bilinear sampling weights the texel colors according to the distance of the texel of interest from the four nearest texels. The closer a point is to a particular texel, the more weight that texel’s color is given in the interpolation. This creates a smooth blend of color between adjacent pixels, resulting in a more similar appearance to the texture image. In our implementation, we used the lerp() function three times for each bilinear sample.</li>
 </ul>
 <p>The main difference between pixel sampling and bilinear sampling, as seen in the images above, is how smooth the latitude and longitude lines are. Pixel sampling produces line segments while bilinear sampling blurs the line and produces a continuous line. This is more prominent in the case of lower sampling rate because supersampling also removes visual artifacts to some extent. Bilinear sampling is better in this particular case because it interpolates the colors of neighboring texels, which helps to smooth out any jagged edges or blocky artifacts that would otherwise be visible. </p>
 <div align="middle">
@@ -226,22 +226,22 @@
     <tr>
       <td>
         <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fe89564bf-5c73-4743-83f9-93e962e67967%2Ftask5_sample1_nearest.png?id=db1da549-49e4-4796-b72e-c4fe2a788f7e&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
-        <figcaption align="middle">Fig 16. task5_sample1_nearest</figcaption>
+        <figcaption align="middle">Fig 16. Sample rate = 1, nearest-pixel sampling</figcaption>
       </td>
       <td>
         <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fdd6656ad-5754-4cfb-ad5b-84e87e796a17%2Ftask5_sample1_bilinear.png?id=af48522b-09cf-40a3-a281-8530ff1a0e3e&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
-        <figcaption align="middle">Fig 18. task5_sample1_bilinear</figcaption>
+        <figcaption align="middle">Fig 18. Sample rate = 1, bilinear sampling</figcaption>
       </td>
     </tr>
     <br>
     <tr>
       <td>
         <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F589550d0-df88-45b8-b884-bdac3f829c3a%2Ftask5_sample16_nearest.png?id=1da03f21-055e-4154-aaa8-57ce81f62bc0&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
-        <figcaption align="middle">Fig 17. task5_sample16_nearest</figcaption>
+        <figcaption align="middle">Fig 17. Sample rate = 16, nearest-pixel sampling</figcaption>
       </td>
       <td>
         <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F0e578692-80bd-4bc1-94ef-407ba354d51d%2Ftask5_sample16_bilinear.png?id=c99f937f-7cc5-40f8-a827-3c68d7342274&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
-        <figcaption align="middle">Fig 19. task5_sample16_bilinear</figcaption>
+        <figcaption align="middle">Fig 19. Sample rate = 16, bilinear samplingg</figcaption>
       </td>
     </tr>
   </table>
@@ -265,22 +265,22 @@
     <tr>
       <td>
         <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fee1187a7-2aea-42c7-ad49-bf5527f26d93%2Ftask6_level0_nearest.png?id=0b683f4e-1fb0-41d2-a3be-9ad6abadad3b&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
-        <figcaption align="middle">Fig 20. task6_level0_nearest</figcaption>
+        <figcaption align="middle">Fig 20. Level 0, nearest-pixel sampling</figcaption>
       </td>
       <td>
         <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F9ccc3358-5c22-4901-bf14-d94d538feec7%2Ftask6_nearest_nearest.png?id=35b572c5-4471-41e1-9c8a-886bc43d4ecf&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
-        <figcaption align="middle">Fig 21. task6_nearest_nearest</figcaption>
+        <figcaption align="middle">Fig 22. Level nearest, nearest-pixel sampling</figcaption>
       </td>
     </tr>
     <br>
     <tr>
       <td>
-        <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F9299bb2a-5b02-402d-aa36-52f1d848aea1%2Ftask6_nearest_bilinear.png?id=ed6cf065-f100-4dc6-9cac-e0860039a8a4&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
-        <figcaption align="middle">Fig 22. task6_nearest_bilinear</figcaption>
+        <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ff473fec4-931e-4226-80ca-f5d972bc98b2%2Ftask6_level0_bilinear.png?id=67d8c000-4028-4a61-b2a1-e6ee71c01f99&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
+        <figcaption align="middle">Fig 21. Level 0, bilinear sampling</figcaption>
       </td>
       <td>
-        <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ff473fec4-931e-4226-80ca-f5d972bc98b2%2Ftask6_level0_bilinear.png?id=67d8c000-4028-4a61-b2a1-e6ee71c01f99&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
-        <figcaption align="middle">Fig 23. task6_level0_bilinear</figcaption>
+        <img src="https://foil-valley-a41.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F9299bb2a-5b02-402d-aa36-52f1d848aea1%2Ftask6_nearest_bilinear.png?id=ed6cf065-f100-4dc6-9cac-e0860039a8a4&table=block&spaceId=ff67df48-404c-4889-a983-fd4c22d51181&width=2000&userId=&cache=v2" align="middle" width="400px"/>
+        <figcaption align="middle">Fig 23. Level nearest, bilinear sampling</figcaption>
       </td>
     </tr>
   </table>
